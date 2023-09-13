@@ -1,34 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom' // Import ReactDOM
 import './App.css'
+import Navbar from './components/Navbar'
+import Lead from './components/Lead'
+import About from './components/About'
+import Experience from './components/Experience'
+import Project from './components/Project'
+import Skill from './components/Skill'
+import Footer from './components/Footer'
 
 function App() {
-  const [count, setCount] = useState(0)
+  useEffect(() => {
+    document.getElementById('current-year').textContent =
+      new Date().getFullYear()
+    document.documentElement.classList.remove('no-js')
+
+    document.querySelectorAll('header a:not(.no-scroll)').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault()
+        const heading = link.getAttribute('href')
+        const scrollDistance = document.querySelector(heading).offsetTop
+        window.scrollTo({
+          top: scrollDistance,
+          behavior: 'smooth'
+        })
+        if (document.querySelector('header').classList.contains('active')) {
+          document.querySelector('header').classList.remove('active')
+        }
+      })
+    })
+
+    // Rest of your useEffect code here
+  }, [])
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <React.StrictMode>
+      <Navbar />
+      <About />
+      <Experience />
+      <Project />
+      <Lead />
+      <Skill />
+      <Footer />
+    </React.StrictMode>
   )
 }
+
+// Use ReactDOM.createRoot to render the App component
+const root = ReactDOM.createRoot(document.getElementById('root'))
+root.render(<App />)
 
 export default App
